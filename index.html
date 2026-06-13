@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonne Nuit — 晚安</title>
+
+<!-- Open Graph / WeChat preview card -->
+<meta property="og:title" content="Bonne Nuit — 晚安，亲爱的">
+<meta property="og:description" content="点开有惊喜，只给你一个人的睡前仪式 🌙">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bonne Nuit">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#8B3A3A">
+
+<!-- using system serif fonts for reliable cross-region loading -->
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #FFF8F0;
+    --rose: #E8C8C8;
+    --dusty-rose: #D4A0A0;
+    --burgundy: #8B3A3A;
+    --gold: #C9A96E;
+    --dark: #3A2020;
+    --lavender: #E8D5E0;
+  }
+
+  body {
+    min-height: 100dvh;
+    background: linear-gradient(135deg, var(--cream) 0%, #F5E6E0 30%, #F0DDE0 60%, var(--cream) 100%);
+    font-family: Georgia, 'Times New Roman', 'Noto Serif SC', 'STSong', 'Songti SC', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── floating petals ── */
+  .petals {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+  .petal {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-10vh) rotate(0deg)   translateX(0);    opacity: 0; }
+    5%   { opacity: 0.7; }
+    85%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(60px); opacity: 0; }
+  }
+
+  /* ── main card ── */
+  .card {
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 24px;
+    padding: 48px 40px 40px;
+    max-width: 520px; width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(139,58,58,0.08), 0 2px 8px rgba(139,58,58,0.04);
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  /* ── decorative border ── */
+  .card::before {
+    content: '';
+    position: absolute; inset: 8px;
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 18px;
+    pointer-events: none;
+  }
+
+  .ornament-top {
+    font-size: 14px; letter-spacing: 6px; color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-family: Georgia, 'Times New Roman', 'Noto Serif SC', 'STSong', serif;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 600;
+    color: var(--burgundy);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    font-size: 13px; color: var(--dusty-rose);
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .question {
+    font-size: clamp(18px, 3.5vw, 22px);
+    color: var(--dark);
+    margin-bottom: 40px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  .question .highlight {
+    color: var(--burgundy);
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  /* ── buttons area ── */
+  .buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    min-height: 80px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 16px 40px;
+    border-radius: 50px;
+    font-size: 20px;
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    border: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+
+  /* 要 — the only real target */
+  .btn-yes {
+    background: var(--burgundy);
+    color: #FFF;
+    box-shadow: 0 4px 20px rgba(139,58,58,0.3);
+    z-index: 3;
+  }
+  .btn-yes:hover {
+    background: #A04545;
+    transform: scale(1.06);
+    box-shadow: 0 6px 28px rgba(139,58,58,0.4);
+  }
+  .btn-yes:active {
+    transform: scale(0.96);
+  }
+
+  /* 不要 — the one that runs away */
+  .btn-no {
+    background: rgba(255,255,255,0.7);
+    color: var(--dusty-rose);
+    border: 1.5px solid var(--dusty-rose);
+    position: relative;
+    z-index: 2;
+    transition: none; /* position driven by JS */
+    will-change: transform;
+  }
+
+  /* ── result overlay ── */
+  .result-overlay {
+    position: fixed; inset: 0;
+    background: rgba(58,32,32,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .result-overlay.show {
+    opacity: 1; pointer-events: auto;
+  }
+  .result-card {
+    background: var(--cream);
+    border-radius: 24px;
+    padding: 48px 36px 36px;
+    text-align: center;
+    max-width: 420px; width: 88%;
+    box-shadow: 0 16px 60px rgba(139,58,58,0.2);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn {
+    0%   { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+  .result-icon { font-size: 56px; margin-bottom: 16px; }
+  .result-title {
+    font-size: 24px; color: var(--burgundy); font-weight: 700;
+    margin-bottom: 12px; letter-spacing: 1px;
+  }
+  .result-text {
+    font-size: 16px; color: var(--dark); line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .result-btn {
+    padding: 12px 32px; border-radius: 50px;
+    background: var(--burgundy); color: #FFF; border: none;
+    font-family: inherit; font-size: 16px; letter-spacing: 2px;
+    cursor: pointer; margin-top: 8px;
+  }
+
+  /* ── interaction cards ── */
+  .interactions {
+    display: flex; flex-direction: column; gap: 12px;
+    margin: 20px 0 8px;
+  }
+  .interact-card {
+    background: rgba(255,248,240,0.6);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 16px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  /* kiss */
+  .interact-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: none; border: 1.5px solid var(--rose);
+    border-radius: 50px; padding: 10px 24px;
+    font-family: inherit; font-size: 15px; color: var(--burgundy);
+    cursor: pointer; letter-spacing: 1px;
+    transition: background 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .interact-btn:hover { background: rgba(232,200,200,0.3); }
+  .interact-btn:active { transform: scale(0.95); }
+  .kiss-icon, .whisper-icon { font-size: 20px; }
+  .kiss-hearts {
+    position: relative; height: 0; overflow: visible;
+    pointer-events: none; z-index: 10;
+  }
+  .kiss-heart {
+    position: absolute;
+    font-size: 22px;
+    animation: heartUp 1.6s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes heartUp {
+    0%   { transform: translateY(0) scale(0.5); opacity: 1; }
+    60%  { opacity: 0.8; }
+    100% { transform: translateY(-180px) scale(1.3); opacity: 0; }
+  }
+  .kiss-counter {
+    font-size: 12px; color: var(--dusty-rose);
+    margin-top: 6px; min-height: 18px;
+  }
+
+  /* wish */
+  .wish-label {
+    display: block; font-size: 14px; color: var(--burgundy);
+    margin-bottom: 10px; letter-spacing: 1px;
+  }
+  .wish-row {
+    display: flex; gap: 8px;
+  }
+  .wish-input {
+    flex: 1; min-width: 0;
+    padding: 10px 14px; border-radius: 50px;
+    border: 1.5px solid var(--rose);
+    background: rgba(255,255,255,0.7);
+    font-family: inherit; font-size: 14px; color: var(--dark);
+    outline: none;
+  }
+  .wish-input:focus { border-color: var(--gold); }
+  .wish-input::placeholder { color: #D0B8B8; }
+  .wish-submit {
+    flex-shrink: 0;
+    padding: 10px 18px; border-radius: 50px;
+    background: var(--gold); color: #FFF; border: none;
+    font-family: inherit; font-size: 13px; letter-spacing: 1px;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .wish-submit:hover { background: #B89A5E; }
+  .wish-saved {
+    font-size: 13px; color: var(--burgundy);
+    margin-top: 8px; min-height: 18px;
+    font-style: italic; letter-spacing: 1px;
+  }
+
+  /* whisper */
+  .whisper-text {
+    font-size: 14px; color: var(--burgundy);
+    margin-top: 10px; min-height: 20px;
+    font-style: italic; letter-spacing: 1px;
+    animation: fadeIn 0.6s ease;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(6px); }
+    100%{ opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── result page transition ── */
+  .result-card { position: relative; overflow: hidden; transition: background 1.2s ease, box-shadow 1.2s ease; }
+  .result-page {
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .result-page.hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+    position: absolute; inset: 0;
+  }
+
+  /* ── starry sky ── */
+  .starry-sky {
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+    border-radius: 24px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sky-static-stars {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  }
+  .static-star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: #FFF;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite;
+    animation-delay: var(--del);
+    box-shadow: 0 0 4px 1px rgba(255,255,240,0.6);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.8); }
+  }
+
+  /* tap-created star */
+  .spark-star {
+    position: absolute;
+    pointer-events: none; z-index: 3;
+    animation: starBloom 3.5s ease-out forwards;
+  }
+  .spark-star .star-core {
+    font-size: 28px; text-align: center;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.9));
+  }
+  .spark-star .star-msg {
+    text-align: center;
+    font-size: 13px; color: #FFE8C0;
+    letter-spacing: 1px;
+    margin-top: 2px;
+    white-space: nowrap;
+    text-shadow: 0 0 6px rgba(255,200,100,0.5);
+  }
+  @keyframes starBloom {
+    0%   { transform: scale(0); opacity: 0; }
+    30%  { transform: scale(1.3); opacity: 1; }
+    60%  { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+  }
+
+  /* dream bubbles */
+  .sky-bubbles {
+    position: absolute; inset: 0; pointer-events: none; z-index: 4;
+  }
+  .dream-bubble {
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #FFE8D0;
+    font-size: 13px; letter-spacing: 1px;
+    white-space: nowrap;
+    pointer-events: auto;
+    animation: bubbleFloat var(--bdr) ease-in forwards;
+    box-shadow: 0 0 12px rgba(180,160,220,0.2);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dream-bubble:active { transform: scale(1.1); }
+  @keyframes bubbleFloat {
+    0%   { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
+    15%  { opacity: 0.9; }
+    85%  { opacity: 0.7; }
+    100% { transform: translateY(calc(-1 * var(--travel))) translateX(var(--drift)) scale(1); opacity: 0; }
+  }
+  .bubble-pop {
+    pointer-events: none;
+    animation: popBurst 0.5s ease-out forwards !important;
+  }
+  @keyframes popBurst {
+    0%   { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* spark burst when bubble pops */
+  .spark-burst {
+    position: absolute; pointer-events: none; z-index: 5;
+    font-size: 18px;
+    animation: sparkOut 0.8s ease-out forwards;
+  }
+  @keyframes sparkOut {
+    0%   { transform: translate(0, 0) scale(0.5); opacity: 1; }
+    100% { transform: translate(var(--sx), var(--sy)) scale(1.2); opacity: 0; }
+  }
+
+  /* hints & counter */
+  .sky-hint {
+    position: absolute; bottom: 60px; left: 0; right: 0;
+    text-align: center; z-index: 6; pointer-events: none;
+    font-size: 14px; color: rgba(255,220,180,0.7);
+    letter-spacing: 2px;
+    transition: opacity 0.6s;
+  }
+  .sky-counter {
+    position: absolute; bottom: 24px; left: 0; right: 0;
+    text-align: center; z-index: 6; pointer-events: none;
+    font-size: 13px; color: rgba(255,200,150,0.6);
+    letter-spacing: 1px;
+    min-height: 20px;
+  }
+
+  /* dimming overlay */
+  .sky-dim {
+    position: absolute; inset: 0; z-index: 50; pointer-events: none;
+    background: rgba(10,5,20,0);
+    transition: background 2s ease;
+    border-radius: 24px;
+  }
+  .sky-dim.deep { background: rgba(10,5,20,0.75); }
+  .sky-dim.done  { background: rgba(8,4,16,0.95); }
+
+  /* sleep text */
+  .sleep-final {
+    position: absolute; inset: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    font-size: 28px; color: #FFE8C0;
+    letter-spacing: 4px;
+    opacity: 0;
+    transition: opacity 2s ease;
+    text-shadow: 0 0 20px rgba(255,200,100,0.4);
+  }
+  .sleep-final.visible { opacity: 1; }
+
+  /* ── escape counter badge ── */
+  .escape-hint {
+    position: fixed; bottom: 24px; right: 24px;
+    font-size: 12px; color: var(--dusty-rose);
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+  }
+  .escape-hint.visible { opacity: 0.7; }
+
+  /* ── mobile tweaks ── */
+  @media (max-width: 480px) {
+    .card { padding: 36px 24px 32px; }
+    .btn { padding: 14px 32px; font-size: 18px; letter-spacing: 1px; }
+    .buttons { gap: 20px; min-height: 70px; }
+    .starry-sky { min-height: 360px; }
+    .dream-bubble { font-size: 11px; padding: 6px 12px; }
+    .sky-hint { font-size: 12px; bottom: 50px; }
+    .sleep-final { font-size: 22px; letter-spacing: 3px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- floating petals -->
+<div class="petals" id="petals" aria-hidden="true"></div>
+
+<!-- main card -->
+<div class="card">
+  <div class="ornament-top">&#10023; &#8226; &#10023; &#8226; &#10023;</div>
+  <div class="title">Bonne Nuit, Ma Chérie</div>
+  <div class="subtitle">&#183; Bonne Nuit &#183;</div>
+  <div class="question">
+    肌肉小妞<br>要不要<span class="highlight">快点睡觉</span>？
+  </div>
+  <div class="buttons" id="buttonsArea">
+    <button class="btn btn-yes" id="btnYes">要 &#9825;</button>
+    <button class="btn btn-no"  id="btnNo">不要...</button>
+  </div>
+</div>
+
+<!-- escape counter hint -->
+<div class="escape-hint" id="escapeHint">它又逃走了 &#10084;&#65039;</div>
+
+<!-- result overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+
+    <!-- page 1: interactions -->
+    <div class="result-page" id="resultFront">
+      <div class="result-icon">&#128564;</div>
+      <div class="result-title">Bonne Nuit,<br>Ma Chérie</div>
+      <div class="result-text">
+        乖，晚安。<br>做个甜甜的梦&#10084;&#65039;
+      </div>
+
+      <div class="interactions">
+        <div class="interact-card kiss-card" id="kissCard">
+          <button class="interact-btn kiss-btn" id="kissBtn">
+            <span class="kiss-icon">&#128139;</span>
+            <span>晚安吻</span>
+          </button>
+          <div class="kiss-hearts" id="kissHearts"></div>
+          <p class="kiss-counter" id="kissCounter"></p>
+        </div>
+        <div class="interact-card wish-card">
+          <label class="wish-label" for="wishInput">&#127769; 明天你想做什么？</label>
+          <div class="wish-row">
+            <input type="text" class="wish-input" id="wishInput"
+                   placeholder="比如：一起去喝奶茶…" maxlength="30">
+            <button class="wish-submit" id="wishSubmit">约定 &#10084;&#65039;</button>
+          </div>
+          <p class="wish-saved" id="wishSaved"></p>
+        </div>
+        <div class="interact-card whisper-card">
+          <button class="interact-btn whisper-btn" id="whisperBtn">
+            <span class="whisper-icon">&#128140;</span>
+            <span>说句悄悄话</span>
+          </button>
+          <p class="whisper-text" id="whisperText"></p>
+        </div>
+      </div>
+
+      <button class="result-btn" id="btnDream">&#127769; 好梦</button>
+    </div>
+
+    <!-- page 2: starry sky + dream bubbles -->
+    <div class="result-page starry-sky hidden" id="starrySky" style="display:none;">
+      <div class="sky-static-stars" id="staticStars"></div>
+      <div class="sky-bubbles" id="dreamBubbles"></div>
+      <div class="sky-sparks" id="skySparks"></div>
+      <p class="sky-hint" id="skyHint">点一下，种一颗星星 &#127775;</p>
+      <p class="sky-counter" id="skyCounter"></p>
+      <div class="sky-dim" id="skyDim"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── DOM refs ──
+  const btnNo   = document.getElementById('btnNo');
+  const btnYes  = document.getElementById('btnYes');
+  const area    = document.getElementById('buttonsArea');
+  const hint    = document.getElementById('escapeHint');
+  const overlay = document.getElementById('resultOverlay');
+
+  // ── state ──
+  const NO_POS = { x: 0, y: 0 };         // current visual position (CSS translate)
+  const THRESHOLD = 120;                  // px — danger zone: only react when quite close
+  const MAX_ESCAPE_PER_FRAME = 5.5;       // slow drift — just barely ahead of the cursor
+  const DAMPING = 0.92;                   // quick stop — doesn't slide far past
+  let velocityX = 0, velocityY = 0;
+  let mouseX = -999, mouseY = -999;       // latest pointer position
+  let escapeCount = 0;
+  let hintTimer = null;
+
+  // ── helpers ──
+  function getBtnCenter() {
+    const r = btnNo.getBoundingClientRect();
+    return {
+      x: r.left + r.width / 2,
+      y: r.top  + r.height / 2
+    };
+  }
+
+  function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+  function showHint() {
+    escapeCount++;
+    hint.textContent = '逃走了 ' + escapeCount + ' 次… &#128064;';
+    hint.classList.add('visible');
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(() => hint.classList.remove('visible'), 2000);
+  }
+
+  // ── push button away from pointer ──
+  function pushAway(px, py) {
+    const center = getBtnCenter();
+    const dx = center.x - px;
+    const dy = center.y - py;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 1) return; // avoid div-by-zero
+    if (dist >= THRESHOLD) return; // out of danger zone
+
+    const force = 1 - (dist / THRESHOLD);          // 0→1, stronger when close
+    const speed = force * MAX_ESCAPE_PER_FRAME * (1 + force * 0.8);
+
+    velocityX += (dx / dist) * speed;
+    velocityY += (dy / dist) * speed;
+  }
+
+  // ── constrain to container ──
+  function applyConstraints() {
+    const areaR  = area.getBoundingClientRect();
+    const btnR   = btnNo.getBoundingClientRect();
+    const margin = 8;
+
+    const minX = areaR.left - btnR.left + margin;
+    const maxX = areaR.right - btnR.right - margin;
+    const minY = areaR.top - btnR.top + margin;
+    const maxY = areaR.bottom - btnR.bottom - margin;
+
+    const prevX = NO_POS.x;
+    const prevY = NO_POS.y;
+
+    NO_POS.x = clamp(NO_POS.x, minX, maxX);
+    NO_POS.y = clamp(NO_POS.y, minY, maxY);
+
+    // Bounce velocity on boundary hit
+    if (NO_POS.x !== prevX) velocityX *= -0.4;
+    if (NO_POS.y !== prevY) velocityY *= -0.4;
+  }
+
+  // ── animation loop ──
+  function tick() {
+    // Apply push force from current pointer position
+    pushAway(mouseX, mouseY);
+
+    // Apply velocity
+    NO_POS.x += velocityX;
+    NO_POS.y += velocityY;
+
+    // Damping
+    velocityX *= DAMPING;
+    velocityY *= DAMPING;
+
+    // Constrain
+    applyConstraints();
+
+    // If hitting boundary and velocity is tiny, zero out
+    if (Math.abs(velocityX) < 0.01 && Math.abs(velocityY) < 0.01) {
+      velocityX = 0; velocityY = 0;
+    }
+
+    // Apply to DOM
+    btnNo.style.transform = `translate(${NO_POS.x.toFixed(1)}px, ${NO_POS.y.toFixed(1)}px)`;
+
+    // Count escapes
+    const center = getBtnCenter();
+    const dx = center.x - mouseX;
+    const dy = center.y - mouseY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < THRESHOLD * 0.7 && (Math.abs(velocityX) > 2 || Math.abs(velocityY) > 2)) {
+      if (!btnNo.dataset.fleeing) {
+        btnNo.dataset.fleeing = '1';
+        showHint();
+        setTimeout(() => { btnNo.dataset.fleeing = ''; }, 400);
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  // ── pointer tracking ──
+  function onPointer(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }
+
+  // ── touch on "不要" — push it hard immediately ──
+  function onTouchNearNo(e) {
+    const touch = e.touches[0];
+    if (!touch) return;
+    const center = getBtnCenter();
+    const dx = center.x - touch.clientX;
+    const dy = center.y - touch.clientY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < THRESHOLD) {
+      // Hard push
+      const force = 2.5;
+      velocityX += (dx / dist) * MAX_ESCAPE_PER_FRAME * force;
+      velocityY += (dy / dist) * MAX_ESCAPE_PER_FRAME * force;
+      e.preventDefault(); // block the tap
+    }
+  }
+
+  // ── resize — reset position ──
+  function onResize() {
+    NO_POS.x = 0; NO_POS.y = 0;
+    velocityX = 0; velocityY = 0;
+    btnNo.style.transform = 'translate(0px, 0px)';
+  }
+
+  // ── "要" clicked ──
+  btnYes.addEventListener('click', () => {
+    resetStarrySky();
+    overlay.classList.add('show');
+  });
+
+  // ── overlay backdrop close ──
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      resetStarrySky();
+      overlay.classList.remove('show');
+    }
+  });
+
+  // ── "不要" clicked — never works; show playful hint ──
+  btnNo.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    showHint();
+  });
+
+  // ── transition to starry sky ──
+  const btnDream   = document.getElementById('btnDream');
+  const resultCard = document.getElementById('resultCard');
+  const frontPage  = document.getElementById('resultFront');
+  const starrySky  = document.getElementById('starrySky');
+
+  btnDream.addEventListener('click', () => {
+    // hide front page
+    frontPage.classList.add('hidden');
+    // reveal starry sky
+    starrySky.style.display = '';
+    starrySky.classList.remove('hidden');
+    // card background darkens
+    resultCard.style.background = 'linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #0f0f23 100%)';
+    resultCard.style.boxShadow = '0 8px 60px rgba(30,20,50,0.5)';
+    // start
+    initStarrySky();
+  });
+
+  // ── starry sky engine ──
+  let starCount = 0;
+  let dreamCount = 0;
+  let bubbleTimer = null;
+  let skyActive = false;
+
+  function resetStarrySky() {
+    skyActive = false;
+    starCount = 0;
+    dreamCount = 0;
+    clearInterval(bubbleTimer);
+    bubbleTimer = null;
+    // reset DOM
+    frontPage.classList.remove('hidden');
+    starrySky.classList.add('hidden');
+    starrySky.style.display = 'none';
+    resultCard.style.background = '';
+    resultCard.style.boxShadow = '';
+    document.getElementById('staticStars').innerHTML = '';
+    document.getElementById('dreamBubbles').innerHTML = '';
+    document.getElementById('skySparks').innerHTML = '';
+    document.getElementById('skyCounter').textContent = '';
+    document.getElementById('skyHint').textContent = '点一下，种一颗星星 🌟';
+    document.getElementById('skyHint').style.opacity = '';
+    const dim = document.getElementById('skyDim');
+    dim.classList.remove('deep', 'done');
+    dim.dataset.deep = '';
+    dim.dataset.done = '';
+    const final = starrySky.querySelector('.sleep-final');
+    if (final) final.remove();
+    starrySky.removeEventListener('click', onSkyTap);
+    starrySky.removeEventListener('touchstart', onSkyTap);
+  }
+
+  const starMessages = [
+    '愿你梦里有我 ✨','明天更爱你一点','你是最亮的星星','好梦，我的宝贝',
+    '梦里见 🌙','闭上眼睛，我在','你是我的宇宙','每一颗星都是你',
+    '晚安，我爱你','星辰因你而亮','你是夜空中最温柔的光','睡吧，小可爱',
+    '月亮替你守护我','星星替我陪着你','今夜好眠','你值得所有美好',
+    '满天星光不如你','心之所向是你','做个甜甜的梦','你是我唯一的愿望',
+  ];
+
+  const dreamBubbles = [
+    '掉进棉花糖云里 ☁️','在塞纳河边散步 🌊','变成一只慵懒的猫 🐱',
+    '在月亮上荡秋千 🌙','收到一封情书 💌','在一片花海里迷路 🌸',
+    '吃不完的甜品 buffet 🍰','飞过巴黎的夜空 🗼','和星星一起跳舞 💃',
+    '在薰衣草田里打滚 🌾','变成人鱼游进深海 🧜','住进巧克力城堡 🏰',
+    '和云朵一起飘浮 ☁️','骑独角兽去彩虹桥 🦄','在温泉里数星星 ♨️',
+  ];
+
+  function initStarrySky() {
+    if (skyActive) return;
+    skyActive = true;
+
+    // generate static background stars
+    const staticContainer = document.getElementById('staticStars');
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 50; i++) {
+      const s = document.createElement('div');
+      s.className = 'static-star';
+      s.style.left = Math.random() * 96 + '%';
+      s.style.top  = Math.random() * 80 + '%';
+      s.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+      s.style.setProperty('--del', Math.random() * 3 + 's');
+      s.style.width  = (1.5 + Math.random() * 3) + 'px';
+      s.style.height = s.style.width;
+      frag.appendChild(s);
+    }
+    staticContainer.appendChild(frag);
+
+    // tap to create stars
+    starrySky.addEventListener('click', onSkyTap);
+    starrySky.addEventListener('touchstart', onSkyTap, { passive: false });
+
+    // spawn dream bubbles periodically
+    spawnBubble();
+    bubbleTimer = setInterval(spawnBubble, 2500);
+  }
+
+  function onSkyTap(e) {
+    if (!skyActive) return;
+    const rect = starrySky.getBoundingClientRect();
+    let cx, cy;
+    if (e.touches) {
+      cx = e.touches[0].clientX - rect.left;
+      cy = e.touches[0].clientY - rect.top;
+      e.preventDefault();
+    } else {
+      cx = e.clientX - rect.left;
+      cy = e.clientY - rect.top;
+    }
+    createStar(cx, cy);
+  }
+
+  function createStar(x, y) {
+    starCount++;
+    const sparks = document.getElementById('skySparks');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'spark-star';
+    wrapper.style.left = (x - 40) + 'px';
+    wrapper.style.top  = (y - 20) + 'px';
+
+    const core = document.createElement('div');
+    core.className = 'star-core';
+    core.textContent = '✦';
+    wrapper.appendChild(core);
+
+    const msg = document.createElement('div');
+    msg.className = 'star-msg';
+    msg.textContent = starMessages[Math.floor(Math.random() * starMessages.length)];
+    wrapper.appendChild(msg);
+
+    sparks.appendChild(wrapper);
+
+    // remove after animation
+    setTimeout(() => { if (wrapper.parentNode) wrapper.remove(); }, 3600);
+
+    updateSkyCounter();
+    checkDim();
+  }
+
+  function spawnBubble() {
+    if (!skyActive) return;
+    const container = document.getElementById('dreamBubbles');
+    const bubble = document.createElement('div');
+    bubble.className = 'dream-bubble';
+    bubble.textContent = dreamBubbles[Math.floor(Math.random() * dreamBubbles.length)];
+
+    const travel = 280 + Math.random() * 180; // px to float up
+    const drift  = (Math.random() - 0.5) * 80; // horizontal drift
+    bubble.style.left = (10 + Math.random() * 70) + '%';
+    bubble.style.bottom = '-40px';
+    bubble.style.setProperty('--travel', travel + 'px');
+    bubble.style.setProperty('--drift', drift + 'px');
+    bubble.style.setProperty('--bdr', (4 + Math.random() * 3) + 's');
+
+    // pop on tap
+    bubble.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popBubble(bubble);
+    });
+    bubble.addEventListener('touchstart', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      popBubble(bubble);
+    });
+
+    container.appendChild(bubble);
+
+    // auto-remove after animation
+    const duration = parseFloat(bubble.style.getPropertyValue('--bdr')) * 1000;
+    setTimeout(() => { if (bubble.parentNode) bubble.remove(); }, duration + 200);
+  }
+
+  function popBubble(bubble) {
+    if (bubble.dataset.popped) return;
+    bubble.dataset.popped = '1';
+    dreamCount++;
+
+    // pop animation
+    bubble.classList.add('bubble-pop');
+
+    // spark burst
+    const rect = bubble.getBoundingClientRect();
+    const skyRect = starrySky.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2 - skyRect.left;
+    const cy = rect.top + rect.height / 2 - skyRect.top;
+    const sparks = document.getElementById('skySparks');
+    const sparkEmojis = ['✨','💫','🌟','⭐','💖','🫧'];
+
+    for (let i = 0; i < 6; i++) {
+      const sp = document.createElement('span');
+      sp.className = 'spark-burst';
+      sp.textContent = sparkEmojis[i % sparkEmojis.length];
+      sp.style.left = cx + 'px';
+      sp.style.top  = cy + 'px';
+      sp.style.setProperty('--sx', ((Math.random() - 0.5) * 60) + 'px');
+      sp.style.setProperty('--sy', ((Math.random() - 0.5) * 60) + 'px');
+      sparks.appendChild(sp);
+      setTimeout(() => { if (sp.parentNode) sp.remove(); }, 900);
+    }
+
+    setTimeout(() => { if (bubble.parentNode) bubble.remove(); }, 500);
+
+    updateSkyCounter();
+    checkDim();
+  }
+
+  function updateSkyCounter() {
+    const counter = document.getElementById('skyCounter');
+    let text = '';
+    if (starCount  > 0) text += '已点亮 ' + starCount + ' 颗星星';
+    if (dreamCount > 0) text += (text ? ' · ' : '') + '抓住 ' + dreamCount + ' 个梦';
+    counter.textContent = text;
+
+    const hint = document.getElementById('skyHint');
+    if (starCount >= 3 && dreamCount >= 2) {
+      hint.textContent = '差不多了… 该睡了 🌙';
+    } else if (starCount >= 1 && dreamCount >= 1) {
+      hint.textContent = '再点几下，梦就满了 ✨';
+    } else if (starCount >= 1) {
+      hint.textContent = '还有梦的泡泡在飘呢 🫧';
+    }
+  }
+
+  function checkDim() {
+    const dim = document.getElementById('skyDim');
+    if (starCount >= 6 && dreamCount >= 3 && !dim.dataset.deep) {
+      dim.dataset.deep = '1';
+      dim.classList.add('deep');
+      const hint = document.getElementById('skyHint');
+      hint.textContent = '困了… 闭上眼睛吧… 😴';
+    }
+    if (starCount >= 10 && dreamCount >= 4 && !dim.dataset.done) {
+      dim.dataset.done = '1';
+      dim.classList.add('done');
+      document.getElementById('skyHint').style.opacity = '0';
+      document.getElementById('skyCounter').textContent = '';
+
+      // stop spawning
+      clearInterval(bubbleTimer);
+      skyActive = false;
+
+      // show final sleep text
+      const finalText = document.createElement('div');
+      finalText.className = 'sleep-final';
+      finalText.innerHTML = 'Bonne Nuit<br>&#127769;';
+      starrySky.appendChild(finalText);
+      requestAnimationFrame(() => { finalText.classList.add('visible'); });
+    }
+  }
+
+  // ── kiss button ──
+  let kissCount = 0;
+  const kissBtn    = document.getElementById('kissBtn');
+  const kissHearts = document.getElementById('kissHearts');
+  const kissCounter = document.getElementById('kissCounter');
+  const heartEmojis = ['❤️','🩷','💗','💖','💕','💘','💝','💞','💓','🩵','😘','💋'];
+
+  kissBtn.addEventListener('click', () => {
+    kissCount++;
+    kissCounter.textContent = kissCount === 1
+      ? '第一个吻 💋'
+      : '已经 ' + kissCount + ' 个吻了… 💋';
+
+    // spawn hearts
+    const frag = document.createDocumentFragment();
+    const count = 6 + Math.floor(Math.random() * 6);
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement('span');
+      heart.className = 'kiss-heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = (30 + Math.random() * 60) + 'px';
+      heart.style.top  = '0px';
+      heart.style.animationDuration = (1 + Math.random() * 1.6) + 's';
+      heart.style.animationDelay = Math.random() * 0.25 + 's';
+      heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+      frag.appendChild(heart);
+    }
+    kissHearts.appendChild(frag);
+
+    // clean up after animation
+    setTimeout(() => { kissHearts.innerHTML = ''; }, 2200);
+  });
+
+  // ── wish submit ──
+  const wishInput  = document.getElementById('wishInput');
+  const wishSubmit = document.getElementById('wishSubmit');
+  const wishSaved  = document.getElementById('wishSaved');
+
+  function saveWish() {
+    const text = wishInput.value.trim();
+    if (!text) return;
+    wishSaved.textContent = '约定好了：' + text + ' ✨';
+    wishSaved.style.animation = 'none';
+    wishSaved.offsetHeight; // reflow
+    wishSaved.style.animation = 'fadeIn 0.6s ease';
+    wishInput.value = '';
+    wishInput.placeholder = '再写一个？';
+  }
+  wishSubmit.addEventListener('click', saveWish);
+  wishInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveWish();
+  });
+
+  // ── whisper button ──
+  const whisperBtn  = document.getElementById('whisperBtn');
+  const whisperText = document.getElementById('whisperText');
+  const whispers = [
+    '你是我一天中最温柔的句号 🌙',
+    '梦里也要记得我在想你',
+    '每天的日落，都不如你好看',
+    '你睡着的样子一定很可爱',
+    '明天醒来第一个想到的就是你',
+    '所有的星星加起来，都没有你闪亮 ✨',
+    '你是我的 Bonne Nuit',
+    '闭上眼睛，我在你梦里等你',
+    '世界很大，但我的世界只有你',
+    '晚安不是结束，是明天的开始',
+    '你的笑容是我一整天的动力 💫',
+    '抱着枕头就像抱着我一样',
+    '每一句晚安，都是我爱你的缩写',
+    '今晚的月色真美，和你一样',
+    '数羊不如数我对你的想念 🐑',
+  ];
+  let lastWhisper = -1;
+
+  whisperBtn.addEventListener('click', () => {
+    let idx;
+    do { idx = Math.floor(Math.random() * whispers.length); }
+    while (idx === lastWhisper && whispers.length > 1);
+    lastWhisper = idx;
+    whisperText.textContent = whispers[idx];
+    whisperText.style.animation = 'none';
+    whisperText.offsetHeight;
+    whisperText.style.animation = 'fadeIn 0.6s ease';
+  });
+
+  // ── bind events ──
+  document.addEventListener('mousemove', onPointer, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches[0]) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; }
+  }, { passive: true });
+  btnNo.addEventListener('touchstart', onTouchNearNo, { passive: false });
+  window.addEventListener('resize', onResize);
+
+  // ── generate petals ──
+  (function genPetals() {
+    const container = document.getElementById('petals');
+    const emojis = ['🌸','🌷','💮','🪷','🌺','💐','🌼','✿','🕊️','🌙'];
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 22; i++) {
+      const el = document.createElement('span');
+      el.className = 'petal';
+      el.textContent = emojis[i % emojis.length];
+      el.style.left = Math.random() * 94 + '%';
+      el.style.animationDuration = (8 + Math.random() * 14) + 's';
+      el.style.animationDelay = Math.random() * 12 + 's';
+      el.style.fontSize = (16 + Math.random() * 22) + 'px';
+      frag.appendChild(el);
+    }
+    container.appendChild(frag);
+  })();
+
+  // ── start ──
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
